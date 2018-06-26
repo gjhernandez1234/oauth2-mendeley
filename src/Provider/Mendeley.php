@@ -7,6 +7,7 @@ use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
+use League\OAuth2\Client\Provider\AbstractProvider;
 
 class Mendeley extends AbstractProvider
 {
@@ -58,7 +59,6 @@ class Mendeley extends AbstractProvider
         $params = array_merge(
             parent::getAuthorizationParameters($options),
             array_filter([
-                'hd'          => $this->hostedDomain,
                 'access_type' => $this->accessType,
                 // if the user is logged in with more than one account ask which one to use for the login!
                 'authuser'    => '-1'
@@ -70,7 +70,6 @@ class Mendeley extends AbstractProvider
     {
         return [
             'all',
-            
         ];
     }
     protected function getScopeSeparator()
