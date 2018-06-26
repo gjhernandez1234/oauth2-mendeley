@@ -29,10 +29,5 @@
         "psr-4": {
             "gjhernandez1234\\OAuth2\\Client\\": "src/"
         }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            
-        }
     }
 }

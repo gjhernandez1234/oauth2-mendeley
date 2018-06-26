@@ -1,6 +1,7 @@
 <?php
 
 namespace gjhernandez1234\OAuth2\Client\Provider;
+use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 
 class MendeleyUser implements ResourceOwnerInterface
 {
@@ -19,9 +20,6 @@ class MendeleyUser implements ResourceOwnerInterface
 
     public function getId()
     {
-        if (array_key_exists('sub', $this->response)) {
-            return $this->response['sub'];
-        }
         return $this->response['id'];
     }
 
@@ -45,10 +43,10 @@ class MendeleyUser implements ResourceOwnerInterface
      */
     public function getFirstName()
     {
-        if (array_key_exists('given_name', $this->response)) {
-            return $this->response['given_name'];
+        if (array_key_exists('first_name', $this->response)) {
+            return $this->response['first_name'];
         }
-        return $this->response['name']['givenName'];
+        return null;
     }
 
     /**
@@ -58,10 +56,10 @@ class MendeleyUser implements ResourceOwnerInterface
      */
     public function getLastName()
     {
-        if (array_key_exists('family_name', $this->response)) {
-            return $this->response['family_name'];
+        if (array_key_exists('last_name', $this->response)) {
+            return $this->response['last_name'];
         }
-        return $this->response['name']['familyName'];
+        return null;
     }
 
     /**
@@ -74,12 +72,50 @@ class MendeleyUser implements ResourceOwnerInterface
         if (array_key_exists('email', $this->response)) {
             return $this->response['email'];
         }
-        if (!empty($this->response['emails'])) {
-            return $this->response['emails'][0]['value'];
+        return null;
+    }
+    
+    /**
+     * Get photo.
+     *
+     * @return string|null
+     */
+    public function getAvatar()
+    {
+        if (array_key_exists('photo', $this->response)) {
+            if(array_key_exists('standard', $this->response["photo"])){
+                return $this->response["photo"]["standard"];
+            }
         }
         return null;
     }
-
+    
+    /**
+     * Get scopus_author_ids.
+     *
+     * @return array|null
+     */
+    public function getScopusId()
+    {
+        if (array_key_exists('scopus_author_ids', $this->response)) {
+            return $this->response["scopus_author_ids"];
+        }
+        return null;
+    }
+    
+    /**
+     * Get orcid_id.
+     *
+     * @return string|null
+     */
+    public function getOrcidId()
+    {
+        if (array_key_exists('orcid_id', $this->response)) {
+            return $this->response["orcid_id"];
+        }
+        return null;
+    }
+    
     /**
      * Get user data as an array.
      *

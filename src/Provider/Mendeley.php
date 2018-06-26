@@ -2,7 +2,6 @@
 
 namespace gjhernandez1234\OAuth2\Client\Provider;
 
-use League\OAuth2\Client\Exception\HostedDomainException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
@@ -17,19 +16,8 @@ class Mendeley extends AbstractProvider
      * @var string If set, this will be sent to google as the "access_type" parameter.
      * @link https://developers.google.com/accounts/docs/OAuth2WebServer#offline
      */
-    protected $accessType;
+    protected $accessType="client_credentials";
     
-    /**
-     * @var array Default fields to be requested from the user profile.
-     * @link https://developers.google.com/+/web/api/rest/latest/people
-     */
-    protected $defaultUserFields = [
-        'id',
-        'name(familyName,givenName)',
-        'displayName',
-        'emails/value',
-        'image/url',
-    ];
     /**
      * @var array Additional fields to be requested from the user profile.
      *            If set, these values will be included with the defaults.
@@ -48,7 +36,7 @@ class Mendeley extends AbstractProvider
     {
         // fields that are required based on other configuration options
         $configurationUserFields = [];
-        $fields = array_merge($this->defaultUserFields, $this->userFields, $configurationUserFields);
+        $fields = array_merge($this->userFields, $configurationUserFields);
         return 'https://api.mendeley.com/profiles/me?' . http_build_query([
             'fields' => implode(',', $fields),
             'alt'    => 'json',
@@ -60,8 +48,6 @@ class Mendeley extends AbstractProvider
             parent::getAuthorizationParameters($options),
             array_filter([
                 'access_type' => $this->accessType,
-                // if the user is logged in with more than one account ask which one to use for the login!
-                'authuser'    => '-1'
             ])
         );
         return $params;
